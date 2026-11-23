@@ -350,27 +350,26 @@ def batchnorm_forward(x, gamma, beta, bn_param):
         # the momentum variable to update the running mean and running variance,    #
         # storing your result in the running_mean and running_var variables.        #
         #############################################################################
-        if mode == 'train':
-            # Eqn 1.0: per-feature mean over the batch, (N,D) -> (D,)
-            sample_mean = np.mean(x, axis=0)
-            # Eqn 1.1: center the data, (N,D) - (D,) broadcast -> (N,D)
-            xmu = x - sample_mean
-            # Eqn 1.2: per-feature (biased) variance, (N,D) -> (D,)
-            sample_var = np.mean(xmu ** 2, axis=0)
-            # Eqn 1.3: standard deviation with eps for stability, (D,)
-            std = np.sqrt(sample_var + eps)
-            # Eqn 1.4: inverse std, (D,)
-            istd = 1.0 / std
-            # Eqn 1.5: normalized input, (N,D) * (D,) -> (N,D)
-            xhat = xmu * istd
-            # Eqn 1.6: scale and shift, (D,)*(N,D) + (D,) -> (N,D)
-            out = gamma * xhat + beta
-            # update running mean with momentum, (D,)
-            running_mean = momentum * running_mean + (1 - momentum) * sample_mean
-            # update running variance with momentum, (D,)
-            running_var = momentum * running_var + (1 - momentum) * sample_var
-            # save intermediates for backward pass
-            cache = (xhat, xmu, istd, gamma)
+        # Eqn 1.0: per-feature mean over the batch, (N,D) -> (D,)
+        sample_mean = np.mean(x, axis=0)
+        # Eqn 1.1: center the data, (N,D) - (D,) broadcast -> (N,D)
+        xmu = x - sample_mean
+        # Eqn 1.2: per-feature (biased) variance, (N,D) -> (D,)
+        sample_var = np.mean(xmu ** 2, axis=0)
+        # Eqn 1.3: standard deviation with eps for stability, (D,)
+        std = np.sqrt(sample_var + eps)
+        # Eqn 1.4: inverse std, (D,)
+        istd = 1.0 / std
+        # Eqn 1.5: normalized input, (N,D) * (D,) -> (N,D)
+        xhat = xmu * istd
+        # Eqn 1.6: scale and shift, (D,)*(N,D) + (D,) -> (N,D)
+        out = gamma * xhat + beta
+        # update running mean with momentum, (D,)
+        running_mean = momentum * running_mean + (1 - momentum) * sample_mean
+        # update running variance with momentum, (D,)
+        running_var = momentum * running_var + (1 - momentum) * sample_var
+        # save intermediates for backward pass
+        cache = (xhat, xmu, istd, gamma)
         #############################################################################
         #                             END OF YOUR CODE                              #
         #############################################################################

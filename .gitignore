@@ -3,3 +3,4 @@
 .env/*
 .venv
 /results_part3_inplace/
+__pycache__/
